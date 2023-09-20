@@ -10,6 +10,8 @@ image_atual = None
 image_anterior = None
 image_path = None
 
+sg.theme('Default1')
+
 def url_download(url):
     global image_atual
     global image_anterior
@@ -409,6 +411,9 @@ def funDesfazer():
     global image_atual
     global image_anterior
 
+    if image_anterior == None or image_atual == None:
+        return 
+
     tmp = image_atual
     image_atual = image_anterior
     image_anterior = tmp
@@ -431,7 +436,7 @@ layout = [
     [sg.Image(key='-IMAGE-', size=(800, 600))],
 ]
 
-window = sg.Window('Photo Shoping', layout, finalize=True)
+window = sg.Window('Fotoloja', layout,icon=r'C:\Users\bruno.apescarolli\Desktop\CGApp\FLicon.ico', finalize=True)
 window.bind('<Control-z>', 'Desfazer')
 
 
