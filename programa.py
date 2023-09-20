@@ -394,8 +394,6 @@ def filMax():
     except ValueError:
         sg.popup("Por favor, insira um valor numérico válido.")
         return
-
-
     try:
         if image_atual:
             image_anterior = image_atual.copy()
@@ -405,7 +403,6 @@ def filMax():
             sg.popup("Nenhuma imagem aberta.")
     except Exception as e:
         sg.popup(f"Erro ao aplicar o filtro máximo: {str(e)}")
-
 
 def funDesfazer():
     global image_atual
@@ -431,6 +428,7 @@ layout = [
                            'Filtro mínimo', 'Filtro máximo']
             ]],
             ['Sobre a image', ['Informacoes',['Dados simples','Dados avançados','Dados GPS']]], 
+            ['Configurações',['Temas',['Black','Cute','Default','Dark','Dracula']]],
             ['Sobre', ['Desenvolvedor']]
         ])],
     [sg.Image(key='-IMAGE-', size=(800, 600))],
@@ -498,6 +496,16 @@ while True:
         filMin()
     elif event == 'Filtro máximo':
         filMax()
+    elif event == 'Default':
+        sg.theme('Default1')
+    elif event == 'Black':
+        sg.theme('Black')
+    elif event == 'Dark':
+        sg.theme('DarkGrey11')
+    elif event == 'Dracula':
+        sg.theme('DarkBrown4')
+    elif event == 'Cute':
+        sg.theme('DarkPurple1')
     elif event == 'Desfazer':
         funDesfazer()
 
