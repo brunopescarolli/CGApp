@@ -1,6 +1,7 @@
 from turtle import width
 import PySimpleGUI as sg
 from PIL import Image, ExifTags, ImageFilter
+import colorsys
 import io
 import os
 import webbrowser
@@ -404,6 +405,32 @@ def filMax():
     except Exception as e:
         sg.popup(f"Erro ao aplicar o filtro máximo: {str(e)}")
 
+def editFundo():
+    global image_atual
+    global image_anterior
+    try:
+        if image_atual:
+            image_anterior = image_atual.copy()
+            image_atual = image_atual.convert('RGBA')
+            auxImage = image_atual.load()
+            for x in range(image_atual.width):
+                for y in range(image_atual.height):
+                    (r,g,b,a) = image_atual.getpixel((x,y))
+
+                    h, s, v = colorsys.rgb_to_hsv(r/255, g/255, b/255)
+                    h, s, v = (h * 360, s * 255, v * 255)
+
+                    if 80 <= h <= 185 and 80 <= s <= 255 and 70 <= v <= 255:
+                        a = 0
+
+                    auxImage[x,y] = (r,g,b,a)
+            show_image()
+        else:
+            sg.popup("Nenhuma imagem aberta.")
+    except Exception as e:
+        sg.popup(f"Erro ao aplicar edição: {str(e)}")
+
+
 def funDesfazer():
     global image_atual
     global image_anterior
@@ -425,7 +452,8 @@ layout = [
                 'Filtro', ['Preto e Branco', 'Sépia', 'Negativo', '16bits', 
                            'Blur', 'Contorno', 'Detalhe', 'Realce de bordas',
                            'Relevo', 'Detectar bordas', 'Nitidez', 'Suavizar',
-                           'Filtro mínimo', 'Filtro máximo']
+                           'Filtro mínimo', 'Filtro máximo'],
+                'Editar', ['Retirar fundo'],
             ]],
             ['Sobre a image', ['Informacoes',['Dados simples','Dados avançados','Dados GPS']]], 
             ['Configurações',['Temas',['Black','Cute','Default','Dark','Dracula']]],
@@ -496,6 +524,8 @@ while True:
         filMin()
     elif event == 'Filtro máximo':
         filMax()
+    elif event == 'Retirar fundo':
+        editFundo()
     elif event == 'Default':
         sg.theme('Default1')
     elif event == 'Black':
